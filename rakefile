@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+require 'rake_tasks'
+
+require 'gems'
+require 'cane'
+require 'travis/yaml' if RUBY_VERSION.match(/\d+/).to_s.to_i > 1
+require 'wwtd/tasks'
+
+require 'rake_tasks/tasks/gem'
+require 'rake_tasks/tasks/spec'
+require 'rake_tasks/tasks/cane'
+require 'rake_tasks/tasks/console'
+require 'rake_tasks/tasks/checksum'
+require 'rake_tasks/tasks/travis_ci_lint'
+require 'rake_tasks/tasks/release'
+
+$VERBOSE = true
+
+reqs = []
+reqs << :cane
+reqs << 'travis_ci:lint' if Kernel.const_defined?('Travis')
+
+specs = [
+  :specs,
+]
+
+local = [
+  'wwtd:parallel',
+]
+
+Rake::Task[:release].clear
+Rake::Task[:release].clear_prerequisites
+task :release => :full_release
+
+RakeTasks.build_default_tasks reqs, specs, local, !ENV['CI'].to_s.strip.empty?

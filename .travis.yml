@@ -1,0 +1,10 @@
+---
+language: ruby
+script: bundle exec rake base --trace
+rvm:
+- 2.2.0
+- 2.3.0
+branches:
+  only:
+  - master
+  - chore/travis-ci
